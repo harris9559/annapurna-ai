@@ -24,7 +24,9 @@ export default function Signup() {
     setError('');
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      // 🔥 FIXED LINE
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://annapurna-backend-e0ww.onrender.com/api";
+
       const response = await axios.post(`${API_URL}/auth/signup`, formData);
 
       localStorage.setItem('token', response.data.token);
@@ -72,7 +74,7 @@ export default function Signup() {
                     required
                     className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary"
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
               </div>
@@ -88,7 +90,7 @@ export default function Signup() {
                     required
                     className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary"
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
               </div>
@@ -105,7 +107,7 @@ export default function Signup() {
                     minLength="6"
                     className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary"
                     value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
                 </div>
               </div>
@@ -123,7 +125,7 @@ export default function Signup() {
                     max="120"
                     className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary"
                     value={formData.age}
-                    onChange={(e) => setFormData({...formData, age: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                   />
                 </div>
               </div>
@@ -135,7 +137,7 @@ export default function Signup() {
                 <select
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary"
                   value={formData.gender}
-                  onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>

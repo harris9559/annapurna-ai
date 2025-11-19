@@ -4,13 +4,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import { Leaf, Mail, Lock } from 'lucide-react';
+import { Leaf, User, Mail, Lock, Calendar } from 'lucide-react';
 
-export default function Login() {
+export default function Signup() {
   const router = useRouter();
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
-    password: ''
+    password: '',
+    age: '',
+    gender: 'male'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,19 +24,17 @@ export default function Login() {
     setError('');
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-      const response = await axios.post(`${API_URL}/auth/login`, formData);
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "https://annapurna-backend-e0ww.onrender.com/api";
+
+      const response = await axios.post(`${API_URL}/auth/signup`, formData);
 
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      if (response.data.user.hasProfile) {
-        router.push('/dashboard');
-      } else {
-        router.push('/profile-setup');
-      }
+      router.push('/profile-setup');
     } catch (error) {
-      setError(error.response?.data?.message || 'Login failed');
+      setError(error.response?.data?.message || 'Signup failed');
     } finally {
       setLoading(false);
     }
@@ -47,10 +48,10 @@ export default function Login() {
           <div className="text-center">
             <Leaf className="mx-auto h-12 w-12 text-ayurveda-secondary" />
             <h2 className="mt-6 text-3xl font-bold text-ayurveda-primary">
-              Welcome Back
+              Create Your Account
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              Sign in to your Ayurvedic wellness account
+              Begin your journey to holistic wellness
             </p>
           </div>
 
@@ -63,51 +64,89 @@ export default function Login() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-ayurveda-primary mb-2">
-                  Email Address
-                </label>
+                <label className="block text-sm font-medium text-ayurveda-primary mb-2">Full Name</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <input
-                    type="email"
+                    type="text"
                     required
-                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary focus:border-transparent"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-ayurveda-primary mb-2">
-                  Password
-                </label>
+                <label className="block text-sm font-medium text-ayurveda-primary mb-2">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <input
+                    type="email"
+                    required
+                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-ayurveda-primary mb-2">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <input
                     type="password"
                     required
-                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayurveda-secondary focus:border-transparent"
+                    minLength="6"
+                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg"
                     value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-ayurveda-primary mb-2">Age</label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <input
+                    type="number"
+                    required
+                    className="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    value={formData.age}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-ayurveda-primary mb-2">Gender</label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  value={formData.gender}
+                  onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-ayurveda-primary hover:bg-ayurveda-green text-white py-3 px-4 rounded-lg font-semibold transition disabled:opacity-50"
+              className="w-full bg-ayurveda-primary text-white py-3 px-4 rounded-lg"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
 
             <div className="text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
-                <a href="/signup" className="font-medium text-ayurveda-secondary hover:text-ayurveda-primary">
-                  Sign up
+                Already have an account?{' '}
+                <a href="/login" className="font-medium text-ayurveda-secondary">
+                  Sign in
                 </a>
               </p>
             </div>
